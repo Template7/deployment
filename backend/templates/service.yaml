@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  labels:
+    run: backend
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: backend-port
+      protocol: TCP
+      name: backend
+      nodePort: {{ .Values.service.port }}
+  selector:
+    run: backend

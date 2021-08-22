@@ -1,0 +1,10 @@
+replica: 1
+configFolder: local
+
+image:
+  repository: allensyk/template7-backend
+  tag: latest
+
+service:
+  type: NodePort
+  port: 31080

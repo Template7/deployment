@@ -1,0 +1,8 @@
+# ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-conf
+  namespace: default
+data:
+  {{- (.Files.Glob (printf "configs/%s/**" .Values.configFolder)).AsConfig | nindent 2 }}
