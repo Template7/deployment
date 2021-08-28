@@ -26,7 +26,6 @@ spec:
           volumeMounts:
             - name: config-volume
               mountPath: /backend/configs
-          command: ["sleep", "infinity"]
       volumes:
         - name: config-volume
           configMap:
