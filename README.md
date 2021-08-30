@@ -12,7 +12,7 @@ Template of helm deployment.
 
 ## Deployment
 
-### Backend
+### [Backend](https://github.com/Template7/backend)
 
 ```
 $ helm install backend -f ./backend/values/local.yaml ./backend
