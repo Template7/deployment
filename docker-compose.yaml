@@ -1,0 +1,52 @@
+version: '3'
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    # environment:
+      # MONGO_INITDB_ROOT_USERNAME: allen
+      # MONGO_INITDB_ROOT_PASSWORD: password
+      # ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      # ME_CONFIG_MONGODB_ADMINPASSWORD: password
+      # MONGO_INITDB_DATABASE: kaiji
+    ports:
+      - 27017:27017
+    volumes:
+      - '/Users/allenkao/.mount/mongodb:/data/db'
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  redis:
+    image: redis
+    container_name: redis
+    # environment:
+    #   PMA_HOST: 192.168.31.73
+    #   PMA_PORT: 3306
+    ports:
+      - 6379:6379
+    # volumes:
+    #   - '/Users/allenkao/Downloads/redis_backup.rdb:/data/dump.rdb'
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  mysql:
+    image: mysql
+    container_name: mysql
+    environment:
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: template7
+    ports:
+      - 3306:3306
+
+  myadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: myadmin
+    environment:
+      PMA_HOST: 192.168.1.135
+      PMA_PORT: 3306
+    ports:
+      - 13306:80
