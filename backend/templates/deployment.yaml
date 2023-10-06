@@ -25,7 +25,7 @@ spec:
               protocol: TCP
           volumeMounts:
             - name: config-volume
-              mountPath: /backend/configs
+              mountPath: /backend/config
       volumes:
         - name: config-volume
           configMap:
