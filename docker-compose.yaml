@@ -41,6 +41,9 @@ services:
       MYSQL_DATABASE: template7
     ports:
       - 3306:3306
+    deploy:
+      restart_policy:
+        condition: on-failure
 
   myadmin:
     image: phpmyadmin/phpmyadmin

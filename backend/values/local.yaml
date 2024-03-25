@@ -3,8 +3,9 @@ configFolder: local
 
 image:
   repository: allensyk/template7-backend
-  tag: latest
+  tag: arm64
 
 service:
   type: NodePort
-  port: 31080
+  internalPort: 8080
+  externalPort: 31080
