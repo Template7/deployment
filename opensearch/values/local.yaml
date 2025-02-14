@@ -1,0 +1,23 @@
+replicas: 1
+minimumMasterNodes: 1
+opensearchPlugins:
+  security:
+    #    enabled: false
+    ssl:
+      transport:
+        enabled: false
+
+opensearchJavaOpts: "-Xms512m -Xmx512m"
+persistence:
+  enabled: false
+resources:
+  requests:
+    memory: "1Gi"
+    cpu: "500m"
+  limits:
+    memory: "2Gi"
+    cpu: "1"
+
+extraEnvs:
+  - name: OPENSEARCH_INITIAL_ADMIN_PASSWORD
+    value: "/h?)xDgM!8aB"

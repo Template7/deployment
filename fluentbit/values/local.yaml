@@ -1,0 +1,69 @@
+serviceAccount:
+  create: true
+
+input:
+  # 配置為監聽 Kubernetes 容器日誌
+  tail:
+    enabled: true
+    paths:
+      - /var/log/containers/backend*.log
+    parser: docker # 默認使用 Docker 日誌解析
+
+filter:
+  kubernetes:
+    enabled: true
+    match: "backend.*" # 僅匹配 `backend` 的日誌
+    mergeLog: true
+    mergeLogKey: log
+
+output:
+  opensearch:
+    enabled: true
+    host: opensearch-cluster-master.default.svc.cluster.local
+    port: 9200
+    index: backend-logs
+    type: "_doc"
+    logstash_format: true
+    logstash_prefix: "k8s"
+    http_user: admin
+    http_passwd: "/h?)xDgM!8aB"
+    tls:
+      enabled: true
+      verify: false
+
+config:
+  service: |
+    [SERVICE]
+        Daemon Off
+        Flush 1
+        Log_Level debug
+        Parsers_File /fluent-bit/etc/parsers.conf
+        Parsers_File /fluent-bit/etc/conf/custom_parsers.conf
+        HTTP_Server On
+        HTTP_Listen 0.0.0.0
+        HTTP_Port {{ .Values.metricsPort }}
+        Health_Check On
+
+  inputs: |
+    [INPUT]
+        Name tail
+        Path /var/log/containers/backend*.log
+        multiline.parser docker, cri
+        Tag kube.*
+        Mem_Buf_Limit 5MB
+        Skip_Long_Lines On
+
+  outputs: |
+    [OUTPUT]
+        Name opensearch
+        Match kube.*
+        Host opensearch-cluster-master.default.svc.cluster.local
+        Logstash_Format On
+        Retry_Limit False
+        Index backend
+        HTTP_User admin
+        HTTP_Passwd /h?)xDgM!8aB
+        Port 9200
+        tls on
+        tls.verify off
+        Suppress_Type_Name On

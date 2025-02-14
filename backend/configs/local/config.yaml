@@ -1,11 +1,16 @@
-log:
-  level: DEBUG
+env: dev
+
+logger:
+  level: debug
+
+service:
+  port: 8080
 
 db:
   sql:
     db: template7
-    host: 127.0.0.1
-    port: 3306
+    host: host.docker.internal
+    port: 33306
     username: admin
     password: password
     connection:
@@ -13,11 +18,14 @@ db:
       max: 8
   nosql:
     db: template7
-    host: 127.0.0.1
-    port: 27017
-    username:
-    password:
+    host: host.docker.internal
+    port: 37017
+    username: admin
+    password: password
 
-redis:
-  host: "127.0.0.1:6379"
+cache:
+  host: "host.docker.internal:36379"
   password:
+
+auth:
+  rbacModelPath: "./config/rbac_model.conf"

@@ -1,0 +1,31 @@
+backend:
+  type: opensearch
+  opensearch:
+    host: opensearch
+    port: 9200
+
+configMaps:
+  input.conf: |
+    <source>
+      @type kube_pod_logs
+      watch true
+      read_from_head true
+      tag kube.*
+    </source>
+
+  filter.conf: |
+    <filter kube.**>
+      @type kubernetes_metadata
+    </filter>
+
+  output.conf: |
+    <match kube.**>
+      @type opensearch
+      host opensearch
+      port 9200
+      logstash_format true
+      logstash_prefix kubernetes
+      logstash_dateformat %Y.%m.%d
+      include_tag_key true
+      type_name _doc
+    </match>

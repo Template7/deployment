@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config
+  namespace: default
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+      Daemon Off
+      Flush 1
+      Log_Level debug
+      Parsers_File /fluent-bit/etc/parsers.conf
+      Parsers_File /fluent-bit/etc/conf/custom_parsers.conf
+      HTTP_Server On
+      HTTP_Listen 0.0.0.0
+      HTTP_Port {{ .Values.metricsPort }}
+      Health_Check On
+
+  inputs: |
+    [INPUT]
+      Name tail
+      Path /var/log/containers/backend*.log
+      multiline.parser docker, cri
+      Tag kube.*
+      Mem_Buf_Limit 5MB
+      Skip_Long_Lines On
+
+  outputs: |
+    [OUTPUT]
+      Name opensearch
+      Match kube.*
+      Host opensearch-cluster-master.default.svc.cluster.local
+      Logstash_Format On
+      Retry_Limit False
+      Index backend
+      HTTP_User admin
+      HTTP_Passwd "/h?)xDgM!8aB"
+      Port  443
+      tls on
+      tls.verify on
+      tls.ca_file /Users/allenkao/Projects/deployment/fluentbit/root-ca.pem
+      Tls.debug 4
+
+  parsers.conf: |
+    [PARSER]
+        Name        json
+        Format      json
+        Time_Key    timestamp
+        Time_Format %Y-%m-%dT%H:%M:%S
+        Decode_Field_As json log
